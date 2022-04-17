@@ -46,7 +46,6 @@ public class StoreFactory {
         Random random = new Random();
         int rnd = random.nextInt(1, 4);
         if (rnd == 1) {
-
             return new SalesAssistant(generateName(), random.nextInt(10000, 60000));
         }
         if (rnd == 2) {

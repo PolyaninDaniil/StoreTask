@@ -26,9 +26,14 @@ public class Store {
                 ",\n employee=" + Arrays.toString(employees) +
                 ",\n openStatus=" + openStatus +
                 "}\n" + getAmountOfEmployees() +
-                "}\n" + getAverageSalary() +
-                "}\n" + getAmountOfProduct() +
-                "}\n" + getMinOfProduct() +
+                "}\n" + "Average salary for SalesAssistants: " + getAverageSalaryForSalesAssistant() +
+                "}\n" + "Average salary for Cleaners: " + getAverageSalaryForCleaners() +
+                "}\n" + "Average salary for Cashiers: " + getAverageSalaryForCashiers() +
+                "}\n" + "Difference between SalesAssistants and Cashiers: " + getDifferenceBetweenSalesAssistantsAndCashiers() + "%" +
+                "}\n" + "Difference between SalesAssistants and Cleaners: " + getDifferenceBetweenSalesAssistantsAndCleaners() + "%" +
+                "}\n" + "Difference between Cashiers and Cleaners: " + getDifferenceBetweenCashiersAndCleaners() + "%" +
+                "}\n" + "Amount of products: " + getAmountOfProduct() +
+                "}\n" + "Minimum price: " + getMinOfProduct() +
                 "}\n" + "Maximum price: " + getMaxOfProduct();
     }
 
@@ -51,27 +56,70 @@ public class Store {
         return n;
     }
 
-    public String getAverageSalary() {
-        int s = 0;
-        for (int i = 0; i < employees.length; i++) {
-            s += employees[i].getSalary();
+    public int getAverageSalaryForSalesAssistant() {
+        int salesAssistants = 0;
+        int allSalaries = 0;
+        for (Employee employee : employees) {
+            if (employee instanceof SalesAssistant) {
+                salesAssistants++;
+                allSalaries += employee.getSalary();
+            }
         }
-        s = s / employees.length;
-        String string = "Average salary: " + s;
-        return string;
-
+        return allSalaries / salesAssistants;
     }
 
-    public String getAmountOfProduct() {
+    public int getAverageSalaryForCashiers() {
+        int cashiers = 0;
+        int allSalaries = 0;
+        for (Employee employee : employees) {
+            if (employee instanceof Cashier) {
+                cashiers++;
+                allSalaries += employee.getSalary();
+            }
+        }
+        return allSalaries / cashiers;
+    }
+
+    public int getAverageSalaryForCleaners() {
+        int cleaners = 0;
+        int allSalaries = 0;
+        for (Employee employee : employees) {
+            if (employee instanceof Cleaner) {
+                cleaners++;
+                allSalaries += employee.getSalary();
+            }
+        }
+        return allSalaries / cleaners;
+    }
+
+    private int percent(int a, int b) {
+        float result = 0;
+        result = ((a - b) * 100) / b;
+
+        return (int) result;
+    }
+
+    public int getDifferenceBetweenSalesAssistantsAndCashiers() {
+        return percent(getAverageSalaryForSalesAssistant(), getAverageSalaryForCashiers());
+    }
+
+    public int getDifferenceBetweenSalesAssistantsAndCleaners() {
+        return percent(getAverageSalaryForSalesAssistant(), getAverageSalaryForCleaners());
+    }
+    public int getDifferenceBetweenCashiersAndCleaners() {
+        return percent(getAverageSalaryForCashiers(), getAverageSalaryForCleaners());
+    }
+
+
+    public int getAmountOfProduct() {
         int s = 0;
         for (int i = 0; i < products.length; i++) {
             s++;
         }
-        String p = "Amount of products: " + s;
-        return p;
+        return s;
     }
 
-    public String getMinOfProduct() {
+    public int getMinOfProduct() {
         int min = 100000;
 
         for (Product product : products) {
@@ -80,8 +128,7 @@ public class Store {
             }
         }
 
-        String p = "Minimal price: " + min + ". ";
-        return p;
+        return min;
     }
 
     public int getMaxOfProduct() {
@@ -103,7 +150,7 @@ public class Store {
         }
         for (Employee employee : employees) {
             if (employee instanceof Stimulatable) {
-                ((Stimulatable)employee).calculatePremium(products.length, max);
+                ((Stimulatable) employee).calculatePremium(products.length, max);
             }
         }
     }
